@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
-import { ArrowRight, Sparkles, Shield, Truck, TrendingUp, Calculator } from "lucide-react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { ArrowRight, Sparkles, Calculator } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 
 import Navbar from "@/components/Navbar";
@@ -8,12 +8,6 @@ import Footer from "@/components/Footer";
 import TrustBar from "@/components/TrustBar";
 import VehicleCard from "@/components/VehicleCard";
 import WhatsAppButton from "@/components/WhatsAppButton";
-import BankTrustBar from "@/components/BankTrustBar";
-import WhyBuySection from "@/components/WhyBuySection";
-import DeliveryWall from "@/components/DeliveryWall";
-
-
-
 
 import { supabase } from "@/lib/supabase";
 
@@ -25,10 +19,13 @@ import client2 from "@/assets/img00000.jpg";
 import client3 from "@/assets/img0000.jpg";
 import client4 from "@/assets/img000.jpg";
 
-/* ROTATING TESTIMONIAL IMAGES */
 const clientImages = [client1, client2, client3, client4];
 
 export default function Index() {
+
+  const { scrollY } = useScroll();
+const heroY = useTransform(scrollY, [0, 500], [0, 120]);
+
 
   /* VEHICLE QUERY */
   const { data: featuredVehicles } = useQuery({
@@ -42,7 +39,6 @@ export default function Index() {
         .limit(6);
 
       if (error) throw error;
-
       return data;
     },
   });
@@ -58,7 +54,6 @@ export default function Index() {
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-
       return data;
     },
   });
@@ -70,13 +65,21 @@ export default function Index() {
       <WhatsAppButton />
 
       {/* HERO */}
-      <section className="relative min-h-svh flex items-end pb-16 overflow-hidden">
+    <section className="relative min-h-[70vh] md:min-h-[90vh] flex items-center pb-16 overflow-hidden">
 
+        {/* BACKGROUND IMAGE */}
         <div className="absolute inset-0">
-          <img src={heroBg} className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-hero" />
+       <motion.img
+  src={heroBg}
+  style={{ y: heroY }}
+  className="absolute inset-0 w-full h-full object-cover object-[center_80%] sm:object-[center_70%] md:object-center"
+/>
+
+          {/* DARK OVERLAY */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-black/80 backdrop-blur-[1px]" />
         </div>
 
+        {/* HERO CONTENT */}
         <div className="page-container relative z-10 pt-24">
 
           <motion.div
@@ -86,59 +89,64 @@ export default function Index() {
             className="max-w-3xl"
           >
 
-            <span className="tag-aqua">Trusted Vehicle Sales Executive</span>
+            {/* TAG */}
+            <span className="tag-aqua shadow-[0_0_18px_rgba(0,255,200,0.25)]">
+  Trusted Vehicle Sales Executive
+</span>
 
-            <h1 className="text-foreground mb-6 leading-[1.05] text-5xl">
-              Your Next Car <span className="text-gradient-gold">Approved.</span>
-            </h1>
+            {/* HERO TITLE */}
+            <h1 className="mb-6 leading-[1.05] text-4xl sm:text-5xl lg:text-6xl font-bold text-white drop-shadow-[0_8px_30px_rgba(0,0,0,0.6)]">
+  Your Next Car{" "}
+  <span className="text-gradient-gold drop-shadow-[0_0_20px_rgba(255,200,0,0.35)]">
+    Approved.
+  </span>
+</h1>
 
-            <p className="text-lg text-muted-foreground mb-6 max-w-xl">
-  Finance with all major banks. Fast approvals. Nationwide delivery.
-</p>
+            {/* HERO SUBTITLE */}
+           
 
-{/* TRUST BULLETS */}
-<div className="flex flex-wrap gap-4 text-sm text-muted-foreground mb-6">
-  <span>Finance with ABSA, WesBank, MFC, Standard Bank, Marquis </span>
-  <span>✔ Fast approvals</span>
-  <span>✔ Nationwide delivery</span>
-</div>
+            {/* TRUST BULLETS */}
+            <div className="flex flex-wrap gap-4 text-sm text-muted-foreground mb-6">
+             
+              
+              
+            </div>
 
+            {/* BANK LOGOS */}
+            <div className="mb-8">
 
-{/* BANK LOGOS */}
-{/* BANK PARTNERS */}
-<div className="mb-8">
+              <p className="text-xs uppercase tracking-wider text-muted-foreground mb-4">
+                Finance available through
+              </p>
 
-  <p className="text-xs uppercase tracking-wider text-muted-foreground mb-4">
-    Finance available through
-  </p>
+              <div className="flex flex-wrap gap-3">
 
-  <div className="flex flex-wrap gap-4">
+                <div className="bank-logo">
+                  <img src="/banks/absa.svg" className="h-6" />
+                </div>
 
-    <div className="bg-white/5 backdrop-blur border border-white/10 rounded-xl px-5 py-3 flex items-center justify-center hover:bg-white/10 transition">
-      <img src="/banks/absa.svg" className="h-6 object-contain" />
-    </div>
+                <div className="bank-logo">
+                  <img src="/banks/wesbank.svg" className="h-6" />
+                </div>
 
-    <div className="bg-white/5 backdrop-blur border border-white/10 rounded-xl px-5 py-3 flex items-center justify-center hover:bg-white/10 transition">
-      <img src="/banks/wesbank.svg" className="h-6 object-contain" />
-    </div>
+                <div className="bank-logo">
+                  <img src="/banks/mfc.svg" className="h-6" />
+                </div>
 
-    <div className="bg-white/5 backdrop-blur border border-white/10 rounded-xl px-5 py-3 flex items-center justify-center hover:bg-white/10 transition">
-      <img src="/banks/mfc.svg" className="h-6 object-contain" />
-    </div>
+                <div className="bank-logo">
+                  <img src="/banks/standardbank.svg" className="h-6" />
+                </div>
 
-    <div className="bg-white/5 backdrop-blur border border-white/10 rounded-xl px-5 py-3 flex items-center justify-center hover:bg-white/10 transition">
-      <img src="/banks/standardbank.svg" className="h-6 object-contain" />
-    </div>
+                <div className="bank-logo">
+                  <img src="/banks/marquis.svg" className="h-6" />
+                </div>
 
-    <div className="bg-white/5 backdrop-blur border border-white/10 rounded-xl px-5 py-3 flex items-center justify-center hover:bg-white/10 transition">
-      <img src="/banks/marquis.svg" className="h-6 object-contain" />
-    </div>
+              </div>
 
-  </div>
+            </div>
 
-</div>
-
-<div className="flex gap-3">
+            {/* CTA BUTTONS */}
+            <div className="flex flex-col sm:flex-row gap-3">
 
               <Link to="/vehicles" className="btn-primary">
                 Browse Vehicles
@@ -172,9 +180,13 @@ export default function Index() {
           <div className="flex items-end justify-between mb-10">
 
             <div>
-              <div className="section-label mb-2">Hand-Picked Inventory</div>
+              <div className="section-label mb-2">
+                Hand-Picked Inventory
+              </div>
 
-              <h2 className="text-foreground">Latest Arrivals</h2>
+              <h2 className="text-foreground">
+                Latest Arrivals
+              </h2>
 
               <p className="text-muted-foreground text-sm mt-1">
                 Premium selection hand-picked for you.
@@ -182,7 +194,8 @@ export default function Index() {
             </div>
 
             <Link to="/vehicles" className="btn-ghost text-sm">
-              View All <ArrowRight className="w-4 h-4" />
+              View All
+              <ArrowRight className="w-4 h-4" />
             </Link>
 
           </div>
@@ -192,7 +205,11 @@ export default function Index() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
 
               {featuredVehicles.map((vehicle, i) => (
-                <VehicleCard key={vehicle.id} vehicle={vehicle} index={i} />
+                <VehicleCard
+                  key={vehicle.id}
+                  vehicle={vehicle}
+                  index={i}
+                />
               ))}
 
             </div>
@@ -201,7 +218,10 @@ export default function Index() {
 
             <div className="grid grid-cols-3 gap-5">
               {Array.from({ length: 6 }).map((_, i) => (
-                <div key={i} className="vehicle-card h-80 animate-pulse bg-muted rounded-xl" />
+                <div
+                  key={i}
+                  className="vehicle-card h-80 animate-pulse bg-muted rounded-xl"
+                />
               ))}
             </div>
 
@@ -218,7 +238,10 @@ export default function Index() {
           <div className="page-container">
 
             <div className="text-center mb-10">
-              <div className="section-label mb-2">Social Proof</div>
+              <div className="section-label mb-2">
+                Social Proof
+              </div>
+
               <h2>Thousands of Happy Buyers</h2>
             </div>
 
@@ -234,21 +257,22 @@ export default function Index() {
                   className="bg-card rounded-2xl overflow-hidden border border-border"
                 >
 
-                  {/* CUSTOMER PHOTO */}
+                  {/* IMAGE */}
                   <div className="aspect-[4/3] overflow-hidden">
-  <img
-    src={clientImages[i % clientImages.length]}
-    alt="Happy customer delivery"
-    className="w-full h-full object-cover"
-  />
-</div>
+                    <img
+                      src={clientImages[i % clientImages.length]}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
 
-                  {/* TESTIMONIAL */}
+                  {/* CONTENT */}
                   <div className="p-5">
 
                     <div className="flex gap-1 mb-3">
                       {Array.from({ length: t.rating }).map((_, j) => (
-                        <span key={j} className="text-primary text-sm">★</span>
+                        <span key={j} className="text-primary text-sm">
+                          ★
+                        </span>
                       ))}
                     </div>
 
@@ -265,7 +289,10 @@ export default function Index() {
                       </div>
 
                       <div>
-                        <div className="text-sm font-medium">{t.name}</div>
+                        <div className="text-sm font-medium">
+                          {t.name}
+                        </div>
+
                         <div className="text-xs text-muted-foreground">
                           {t.location} · {t.vehicle}
                         </div>
