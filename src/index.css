@@ -1,0 +1,219 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Design System: Bongani Mahlangu Auto Sales ─────────────────────────── */
+/* All colors are HSL. Dark performance dashboard aesthetic.                   */
+
+@layer base {
+  :root {
+    /* Core Surfaces */
+    --background:       222 47% 11%;     /* #0F172A */
+    --foreground:       210 40% 98%;     /* #F8FAFC */
+
+    --card:             220 26% 17%;     /* #1E2937 */
+    --card-foreground:  210 40% 98%;
+
+    --popover:          220 26% 17%;
+    --popover-foreground: 210 40% 98%;
+
+    /* Primary Action — Gold */
+    --primary:          45 81% 52%;      /* #E8B923 */
+    --primary-foreground: 222 47% 11%;
+
+    /* Secondary — Electric Aqua (performance accent) */
+    --secondary:        170 100% 45%;    /* #00E6C3 */
+    --secondary-foreground: 222 47% 11%;
+
+    /* Muted */
+    --muted:            220 18% 25%;
+    --muted-foreground: 215 20% 65%;     /* #CBD5E1 */
+
+    /* Accent — Urgency Red-Orange */
+    --accent:           11 100% 61%;     /* #FF5E3A */
+    --accent-foreground: 210 40% 98%;
+
+    /* Destructive */
+    --destructive:      0 63% 31%;
+    --destructive-foreground: 210 40% 98%;
+
+    /* Border / Input */
+    --border:           217 33% 22%;
+    --input:            217 33% 22%;
+    --ring:             170 100% 45%;   /* aqua focus rings */
+
+    --radius: 0.5rem;
+
+    /* Sidebar (admin) */
+    --sidebar-background: 222 47% 8%;
+    --sidebar-foreground:  210 40% 98%;
+    --sidebar-primary:     45 81% 52%;
+    --sidebar-primary-foreground: 222 47% 11%;
+    --sidebar-accent:      220 26% 17%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border:      217 33% 22%;
+    --sidebar-ring:        170 100% 45%;
+
+    /* Extended Tokens */
+    --surface-raised:   220 26% 20%;
+    --surface-overlay:  222 47% 14%;
+    --gold-glow:        45 81% 52% / 0.25;
+    --aqua-glow:        170 100% 45% / 0.25;
+    --urgency-glow:     11 100% 61% / 0.25;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    font-family: 'DM Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'DM Sans', system-ui, sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold tracking-tight;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* Fluid headings */
+  h1 { font-size: clamp(2.5rem, 5vw + 1rem, 4.5rem); }
+  h2 { font-size: clamp(2rem, 4vw + 0.5rem, 3rem); }
+
+  /* Tabular numbers for price/data */
+  .tabular { font-variant-numeric: tabular-nums; }
+}
+
+@layer components {
+  /* ─── Button System ───────────────────────────────────────────────── */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-8 h-11 font-medium text-sm
+           bg-primary text-primary-foreground
+           transition-all duration-150
+           hover:brightness-110 active:scale-95;
+    box-shadow: 0 0 0px 0px hsl(var(--secondary) / 0);
+    transition: box-shadow 150ms, background-color 150ms, transform 150ms;
+  }
+  .btn-primary:hover {
+    box-shadow: 0 0 20px 0px hsl(var(--secondary) / 0.35);
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-8 h-11 font-medium text-sm
+           border border-primary text-primary bg-transparent
+           hover:bg-primary/10 active:scale-95 transition-all duration-150;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 h-10 font-medium text-sm
+           text-muted-foreground hover:text-foreground hover:bg-muted
+           active:scale-95 transition-all duration-150;
+  }
+
+  /* ─── Vehicle Card ───────────────────────────────────────────────── */
+  .vehicle-card {
+    @apply bg-card rounded-2xl overflow-hidden cursor-pointer;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.2), 0 2px 4px -2px rgb(0 0 0 / 0.15);
+    transition: transform 200ms cubic-bezier(0.32, 0.72, 0, 1),
+                box-shadow 200ms cubic-bezier(0.32, 0.72, 0, 1);
+  }
+  .vehicle-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px -10px rgb(0 0 0 / 0.4), 0 8px 16px -4px rgb(0 0 0 / 0.2);
+  }
+
+  /* ─── Section Label (caps) ───────────────────────────────────────── */
+  .section-label {
+    @apply font-medium tracking-[0.06em] uppercase text-xs text-secondary;
+  }
+
+  /* ─── Input ─────────────────────────────────────────────────────── */
+  .input-dark {
+    @apply w-full bg-background border border-border rounded-lg px-4 h-11 text-foreground
+           placeholder:text-muted-foreground text-sm
+           focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background
+           transition-all duration-150;
+  }
+
+  /* ─── Stat Card ─────────────────────────────────────────────────── */
+  .stat-card {
+    @apply bg-card rounded-xl p-4 flex flex-col gap-1;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 0.2);
+  }
+
+  /* ─── Glass Panel ────────────────────────────────────────────────── */
+  .glass-panel {
+    background: hsl(220 26% 17% / 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid hsl(217 33% 22%);
+  }
+
+  /* ─── Page Container ─────────────────────────────────────────────── */
+  .page-container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* ─── Section ────────────────────────────────────────────────────── */
+  .section {
+    @apply py-16 sm:py-24;
+  }
+
+  /* ─── Tag/Badge ──────────────────────────────────────────────────── */
+  .tag-gold {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+           bg-primary/15 text-primary border border-primary/30;
+  }
+  .tag-aqua {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+           bg-secondary/15 text-secondary border border-secondary/30;
+  }
+  .tag-red {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+           bg-accent/15 text-accent border border-accent/30;
+  }
+
+  /* ─── Admin Sidebar Item ─────────────────────────────────────────── */
+  .sidebar-item {
+    @apply flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium
+           text-muted-foreground hover:text-foreground hover:bg-sidebar-accent
+           transition-all duration-150 cursor-pointer;
+  }
+  .sidebar-item.active {
+    @apply text-primary bg-primary/10 border border-primary/20;
+  }
+
+  /* ─── Gradient text ──────────────────────────────────────────────── */
+  .text-gradient-gold {
+    background: linear-gradient(135deg, hsl(45 81% 52%), hsl(45 81% 70%));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .text-gradient-aqua {
+    background: linear-gradient(135deg, hsl(170 100% 45%), hsl(190 100% 60%));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ─── Scrollbar ──────────────────────────────────────────────────── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: hsl(var(--background)); }
+  ::-webkit-scrollbar-thumb { background: hsl(var(--muted)); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: hsl(var(--muted-foreground)); }
+}
