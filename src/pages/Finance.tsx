@@ -71,38 +71,45 @@ export default function FinancePage() {
       const ap = approvalProb(inc, loanAmt, parseFloat(form.deposit) || 0);
       const me = calcMonthly(loanAmt - (parseFloat(form.deposit) || 0), parseInt(form.loan_term_months));
 
-      const { error } = await supabase.from("finance_applications").insert({
-        full_name: form.full_name,
-        email: form.email,
-        phone: form.phone,
-        id_number: form.id_number || null,
-        monthly_income: inc,
-        employment_type: form.employment_type,
-        employer_name: form.employer_name || null,
-        loan_amount: loanAmt,
-        deposit: parseFloat(form.deposit) || 0,
-        loan_term_months: parseInt(form.loan_term_months),
-        vehicle_interest: form.vehicle_interest || null,
-        approval_probability: ap,
-        monthly_estimate: Math.round(me),
-        status: "pending",
-      });
+      const { error } = await supabase
+  .from("finance_applications")
+  .insert([
+    {
+      full_name: form.full_name,
+      email: form.email,
+      phone: form.phone,
+      id_number: form.id_number || null,
+      monthly_income: inc,
+      employment_type: form.employment_type,
+      employer_name: form.employer_name || null,
+      loan_amount: loanAmt,
+      deposit: parseFloat(form.deposit) || 0,
+      loan_term_months: parseInt(form.loan_term_months),
+      vehicle_interest: form.vehicle_interest || null,
+      approval_probability: ap,
+      monthly_estimate: Math.round(me),
+      status: "pending",
+    },
+  ]);
 
       // Also save as lead
-      await supabase.from("leads").insert({
-        name: form.full_name,
-        email: form.email,
-        phone: form.phone,
-        lead_type: "finance",
-        vehicle_interest: form.vehicle_interest || null,
-        income_estimate: inc,
-        lead_score: ap,
-        status: "new",
-      });
+      await supabase.from("leads").insert([
+  {
+    name: form.full_name,
+    email: form.email,
+    phone: form.phone,
+    lead_type: "finance",
+    vehicle_interest: form.vehicle_interest || null,
+    income_estimate: inc,
+    lead_score: ap,
+    status: "new",
+  },
+]);
 
       if (error) throw error;
       setSubmitted(true);
-    } catch {
+    } catch (err) {
+  console.error(err);
       toast({ title: "Submission failed", description: "Please try again or WhatsApp us directly.", variant: "destructive" });
     } finally {
       setLoading(false);
